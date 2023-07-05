@@ -1,0 +1,2 @@
+1. keep the note window at the top
+2. create the cuckoo clock setting that can adjust whether chirp on hour or half an hour

@@ -1,0 +1,12 @@
+<RCC>
+  <qresource prefix="buttons">
+    <file>imgs/icons/CZ_027.png</file>
+    <file>imgs/icons/2zuixiaohua-2.png</file>
+    <file>imgs/icons/guanbi.png</file>
+    <file>imgs/icons/zuidahua.png</file>
+  </qresource>
+  <qresource prefix="icons">
+    <file>imgs/whiteCuckoo.png</file>
+    <file>imgs/cuckoo.png</file>
+  </qresource>
+</RCC>
