@@ -8,4 +8,6 @@ Icon at the left top corner can open setting window. To avoid program crash, men
 
 Fork and Star are welcomed.
 
-For distribution, keep the .exe and sound folder under the same dirrectory. Create shortcut if it is needed.
+For distribution, keep the .exe and sound folder under the same dirrectory. Create shortcut if it is needed. You can download the .zip file on the release page.
+
+![image](https://github.com/mariaye/cuckooClock/assets/37957840/15774c49-432d-4e87-9595-ac3ee61b4ff5)
