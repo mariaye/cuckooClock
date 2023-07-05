@@ -1,1 +1,1 @@
-Cuckoo Clock -- Desktop project management
+Cuckoo Clock -- Desktop note clock

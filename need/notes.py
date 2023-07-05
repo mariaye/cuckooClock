@@ -15,11 +15,22 @@ class Ui_NoteWindow(object):
     def setupUi(self, NoteWindow):
         NoteWindow.setObjectName("NoteWindow")
         NoteWindow.resize(600, 300)
+        NoteWindow.setMinimumSize(QtCore.QSize(600, 300))
+        NoteWindow.setMaximumSize(QtCore.QSize(600, 300))
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icons/imgs/cuckoo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        NoteWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(NoteWindow)
+        self.centralwidget.setMinimumSize(QtCore.QSize(600, 300))
+        self.centralwidget.setMaximumSize(QtCore.QSize(600, 300))
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame = QtWidgets.QFrame(self.centralwidget)
+        self.frame.setMinimumSize(QtCore.QSize(600, 300))
+        self.frame.setMaximumSize(QtCore.QSize(600, 300))
         self.frame.setStyleSheet("QFrame#frame{\n"
 "border:5px solid rgb(113, 85, 51);\n"
 "border-radius:20px;\n"
@@ -75,9 +86,9 @@ class Ui_NoteWindow(object):
 "    background-color:rgb(101, 101, 55);\n"
 "}")
         self.pushButton.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/buttons/imgs/icons/zuidahua.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton.setIcon(icon)
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/buttons/imgs/icons/zuidahua.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.pushButton.setIcon(icon1)
         self.pushButton.setIconSize(QtCore.QSize(30, 30))
         self.pushButton.setObjectName("pushButton")
         self.horizontalLayout.addWidget(self.pushButton)

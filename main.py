@@ -12,6 +12,17 @@ from need.notes import Ui_NoteWindow
 from need.setting import Ui_SettingWindow
 
 
+def get_exe_directory():
+    if getattr(sys, 'frozen', False):  # 判断是否为打包后的exe文件
+        # 获取exe文件路径
+        exe_path = sys.executable
+        # 返回exe文件所在目录
+        return os.path.dirname(exe_path)
+    else:
+        # 返回当前脚本所在目录
+        return os.path.dirname(os.path.abspath(__file__))
+
+
 class MainWindow(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
@@ -58,14 +69,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.label.setText(formatted_date)
 
     def save_note(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "note.txt")
+        file_path = os.path.join(get_exe_directory(), "note.txt")
         with open(file_path, 'w') as file:
             file.write(self.textEdit.toPlainText())
 
     def update_text(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "note.txt")
-        with open(file_path, 'r') as file:
-            self.textEdit.setText(file.read())
+        file_path = os.path.join(get_exe_directory(), "note.txt")
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as file:
+                self.textEdit.setText(file.read())
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton and self.isMaximized() is False:
@@ -90,13 +102,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_4.setText("Cuckoo Clock")
 
     def init_clock(self):
-        setting_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "setting.txt")
-        with open(setting_path, "r") as file:
-            halfHour, theHour, volume = file.read().strip().split("\t")
-            self.halfHour = bool(int(halfHour))
-            self.theHour = bool(int(theHour))
-            self.volume = int(volume)
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "sound/cuckooSound.mp3")
+        setting_path = os.path.join(get_exe_directory(), "setting.txt")
+        # print(setting_path)
+        if os.path.exists(setting_path):
+            with open(setting_path, "r") as file:
+                halfHour, theHour, volume = file.read().strip().split("\t")
+                self.halfHour = bool(int(halfHour))
+                self.theHour = bool(int(theHour))
+                self.volume = int(volume)
+        file_path = os.path.join(get_exe_directory(), "sound/cuckooSound.mp3")
         media_content = QMediaContent(QUrl.fromLocalFile(file_path))
         self.media_player.setVolume(self.volume)
         self.media_player.setMedia(media_content)
@@ -105,8 +119,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         time = datetime.now().time()
         # print(time.minute, time.second)
         if self.theHour and time.minute == 0 and time.second == 0:
+            print("the Hour")
             self.media_player.play()
         if self.halfHour and time.minute == 30 and time.second == 0:
+            print("half Hour")
             self.media_player.play()
 
         # if time.second == 0:
@@ -126,12 +142,12 @@ class NoteWindow(QMainWindow, Ui_NoteWindow):
         self.show()
 
     def update_text(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "note.txt")
+        file_path = os.path.join(get_exe_directory(), "note.txt")
         with open(file_path, 'r') as file:
             self.textEdit.setText(file.read())
 
     def save_note(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "note.txt")
+        file_path = os.path.join(get_exe_directory(), "note.txt")
         with open(file_path, 'w') as file:
             file.write(self.textEdit.toPlainText())
 
@@ -164,25 +180,29 @@ class SettingWindow(QMainWindow, Ui_SettingWindow):
         self.pushButton.clicked.connect(self.close)
         self.verticalSlider.valueChanged.connect(self.update_volume)
 
+        self.checkBox.setChecked(True)
+        self.checkBox_2.setChecked(True)
+        self.verticalSlider.setValue(100)
+
     def open_link(self, url):
         QDesktopServices.openUrl(QUrl(url))
 
     def Open(self):
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "setting.txt")
-        if os.path.exists("setting.txt"):
+        file_path = os.path.join(get_exe_directory(), "setting.txt")
+        if os.path.exists(file_path):
             with open(file_path, 'r') as file:
                 halfHour, theHour, volume = file.read().strip().split("\t")
                 # print(halfHour, theHour, volume)
                 self.checkBox.setChecked(bool(int(halfHour)))
                 self.checkBox_2.setChecked(bool(int(theHour)))
                 self.verticalSlider.setValue(int(volume))
-        else:
-            setting = "1" + "\t" + "1" + "\t" + "100"
-            with open(file_path, 'w') as file:
-                file.write(setting)
-                self.checkBox.setChecked(True)
-                self.checkBox_2.setChecked(True)
-                self.verticalSlider.setValue(100)
+        # else:
+        #     setting = "1" + "\t" + "1" + "\t" + "100"
+        #     with open(file_path, 'w') as file:
+        #         file.write(setting)
+        #         self.checkBox.setChecked(True)
+        #         self.checkBox_2.setChecked(True)
+        #         self.verticalSlider.setValue(100)
         self.show()
 
     def update_volume(self, value):
@@ -192,7 +212,7 @@ class SettingWindow(QMainWindow, Ui_SettingWindow):
         setting = str(int(self.checkBox.isChecked())) + "\t" \
                   + str(int(self.checkBox_2.isChecked())) + "\t" \
                   + str(self.verticalSlider.value())
-        file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "setting.txt")
+        file_path = os.path.join(get_exe_directory(), "setting.txt")
         with open(file_path, 'w') as file:
             file.write(setting)
         self.close()
@@ -232,8 +252,8 @@ if __name__ == '__main__':
 
     noteWindow.pushButton.clicked.connect(noteWindow.close)
     noteWindow.pushButton.clicked.connect(noteWindow.save_note)
-    noteWindow.pushButton.clicked.connect(window.show)
     noteWindow.pushButton.clicked.connect(window.update_text)
+    noteWindow.pushButton.clicked.connect(window.show)
 
     window.pushButton_4.clicked.connect(settingWindow.Open)
 
